@@ -63,8 +63,8 @@ export class UsersService {
                 throw new UnauthorizedException('Invalid credentials');
             }
             const payload = { email: user.email };
-            const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
-            const refreshToken = this.jwtService.sign(payload, { expiresIn: loginDto?.rememberMe ? '7d' : '1d' });
+            const accessToken = this.jwtService.sign({ ...payload, tokenType: 'access' }, { expiresIn: '1h' });
+            const refreshToken = this.jwtService.sign({ ...payload, tokenType: 'refresh' }, { expiresIn: loginDto?.rememberMe ? '7d' : '1d' });
             const csrfToken = await bcrypt.genSalt();
             return { accessToken, refreshToken, csrfToken };
         } catch (error) {
