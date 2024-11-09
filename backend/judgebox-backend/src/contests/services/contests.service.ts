@@ -52,7 +52,7 @@ export class ContestsService {
         }
     }
 
-    async getAllContests(getContestsDto: GetContestsDto): Promise<ContestsEntity[]> {
+    async getContests(getContestsDto: GetContestsDto): Promise<ContestsEntity[]> {
         try {
             return await this.contestsRepository.find({
                 where: {
