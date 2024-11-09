@@ -5,6 +5,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -54,6 +55,7 @@ export class ProblemsEntity {
     memoryLimit: number; // in megabytes
 
     @ManyToOne(() => UsersEntity, (user) => user.createdProblems)
+    @JoinColumn({ name: 'createdBy', referencedColumnName: 'id' })
     createdBy: UsersEntity;
 
     @OneToMany(() => ContestProblemsEntity, (contestProblem) => contestProblem.problem)
