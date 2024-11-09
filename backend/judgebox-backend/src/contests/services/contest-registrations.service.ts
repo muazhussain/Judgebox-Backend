@@ -12,7 +12,7 @@ import { GetContestRegistrationsDto } from '../dtos/get-contest-registrations.dt
 import { CreateContestRegistrationDto } from '../dtos/create-contest-registration.dto';
 
 @Injectable()
-export class ContestsRegistrationsService {
+export class ContestRegistrationsService {
     constructor(
         @InjectRepository(ContestRegistrationsEntity) private readonly contestsRegistrationsRepository: Repository<ContestRegistrationsEntity>,
         private dataSource: DataSource,
