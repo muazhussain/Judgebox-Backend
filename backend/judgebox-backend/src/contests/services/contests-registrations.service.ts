@@ -32,7 +32,7 @@ export class ContestsRegistrationsService {
         }
     }
 
-    async getContestRegistrations(contestRegistrationId: string): Promise<ContestRegistrationsEntity> {
+    async getContestRegistration(contestRegistrationId: string): Promise<ContestRegistrationsEntity> {
         try {
             const findContestRegistration = await this.contestsRegistrationsRepository.findOne({
                 select: ['id', 'participant', 'contest'],
@@ -49,7 +49,7 @@ export class ContestsRegistrationsService {
         }
     }
 
-    async getAllContestRegistrations(getContestRegistrationsDto: GetContestRegistrationsDto): Promise<ContestRegistrationsEntity[]> {
+    async getContestRegistrations(getContestRegistrationsDto: GetContestRegistrationsDto): Promise<ContestRegistrationsEntity[]> {
         try {
             return await this.contestsRegistrationsRepository.find({
                 select: ['id', 'participant', 'contest'],
