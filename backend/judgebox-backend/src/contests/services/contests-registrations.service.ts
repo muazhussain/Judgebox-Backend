@@ -9,6 +9,7 @@ import {
     Repository
 } from 'typeorm';
 import { GetContestRegistrationsDto } from '../dtos/get-contest-registrations.dto';
+import { CreateContestRegistrationDto } from '../dtos/create-contest-registration.dto';
 
 @Injectable()
 export class ContestsRegistrationsService {
@@ -17,7 +18,7 @@ export class ContestsRegistrationsService {
         private dataSource: DataSource,
     ) { }
 
-    async createContestRegistration(createContestRegistrationDto: ContestRegistrationsEntity) {
+    async createContestRegistration(createContestRegistrationDto: CreateContestRegistrationDto) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
