@@ -1,20 +1,19 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
-import { ContestsRegistrationsService } from "../services/contests-registrations.service";
+import { ContestRegistrationsService } from "../services/contest-registrations.service";
 import { CreateContestRegistrationDto } from "../dtos/create-contest-registration.dto";
 import { commonResponse } from "src/utils/common-response";
-import { get } from "http";
 import { GetContestRegistrationsDto } from "../dtos/get-contest-registrations.dto";
 
 @Controller('contest-registrations')
-export class ContestsRegistrationsController {
+export class ContestRegistrationsController {
     constructor(
-        private readonly contestsRegistrationsService: ContestsRegistrationsService,
+        private readonly contestRegistrationsService: ContestRegistrationsService,
     ) { }
 
     @Post('register')
     async createContestRegistration(@Body() createContestRegistrationDto: CreateContestRegistrationDto) {
         try {
-            const data = await this.contestsRegistrationsService.createContestRegistration(createContestRegistrationDto);
+            const data = await this.contestRegistrationsService.createContestRegistration(createContestRegistrationDto);
             return commonResponse(true, 'Create contest registration successfully', data);
         } catch (error) {
             return commonResponse(false, 'Create contest registration failed', error);
@@ -24,7 +23,7 @@ export class ContestsRegistrationsController {
     @Get(':id')
     async getContestRegistration(@Param('id') contestRegistrationId: string) {
         try {
-            const data = await this.contestsRegistrationsService.getContestRegistration(contestRegistrationId);
+            const data = await this.contestRegistrationsService.getContestRegistration(contestRegistrationId);
             return commonResponse(true, 'Get contest registration successfully', data);
         } catch (error) {
             return commonResponse(false, 'Get contest registration failed', error);
@@ -34,7 +33,7 @@ export class ContestsRegistrationsController {
     @Get()
     async getAllContestRegistrations(@Query() getContestRegistrationsDto: GetContestRegistrationsDto) {
         try {
-            const data = await this.contestsRegistrationsService.getContestRegistrations(getContestRegistrationsDto);
+            const data = await this.contestRegistrationsService.getContestRegistrations(getContestRegistrationsDto);
             return commonResponse(true, 'Get all contest registrations successfully', data);
         } catch (error) {
             return commonResponse(false, 'Get all contest registrations failed', error);
@@ -44,7 +43,7 @@ export class ContestsRegistrationsController {
     @Delete(':id')
     async deleteContestRegistration(@Param('id') contestRegistrationId: string) {
         try {
-            const data = await this.contestsRegistrationsService.deleteContestRegistration(contestRegistrationId);
+            const data = await this.contestRegistrationsService.deleteContestRegistration(contestRegistrationId);
             return commonResponse(true, 'Delete contest registration successfully', data);
         } catch (error) {
             return commonResponse(false, 'Delete contest registration failed', error);
