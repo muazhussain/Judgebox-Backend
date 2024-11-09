@@ -10,6 +10,7 @@ import {
 import { UserRoles } from "../enums/user-role.enum";
 import { Exclude } from "class-transformer";
 import { ContestsEntity } from "src/contests/entities/contests.entity";
+import { ContestRegistrationsEntity } from "src/contests/entities/contest-registrations.entity";
 
 @Entity('users')
 export class UsersEntity {
@@ -43,5 +44,8 @@ export class UsersEntity {
     role: UserRoles;
 
     @OneToMany(() => ContestsEntity, (contest) => contest.createdBy)
-    contestHost: ContestsEntity[];
+    hostedContests: ContestsEntity[];
+
+    @OneToMany(() => ContestRegistrationsEntity, (registration) => registration.participant)
+    participatedContests: ContestRegistrationsEntity[];
 }

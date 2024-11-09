@@ -4,9 +4,11 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity, ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
+import { ContestRegistrationsEntity } from "./contest-registrations.entity";
 
 @Entity('contests')
 export class ContestsEntity {
@@ -34,6 +36,9 @@ export class ContestsEntity {
     @Column({ type: 'timestamp with time zone' })
     endTime: Date;
 
-    @ManyToOne(() => UsersEntity, user => user.contestHost)
+    @ManyToOne(() => UsersEntity, user => user.hostedContests)
     createdBy: UsersEntity;
+
+    @OneToMany(() => ContestRegistrationsEntity, registration => registration.contest)
+    participants: ContestRegistrationsEntity[];
 }
