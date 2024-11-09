@@ -17,9 +17,9 @@ export class ContestsController {
     async createContest(@Body() createContestDto: CreateContestDto) {
         try {
             const data = await this.contestsService.createContest(createContestDto);
-            return commonResponse(true, 'Contest created successfully', data);
+            return commonResponse(true, 'Create contest successfully', data);
         } catch (error) {
-            return commonResponse(false, 'Contest creation failed', error);
+            return commonResponse(false, 'Create contest failed', error);
         }
     }
 
@@ -27,18 +27,18 @@ export class ContestsController {
     async getContest(@Param('id') contestId: string) {
         try {
             const data = await this.contestsService.getContest(contestId);
-            return commonResponse(true, 'Contest found successfully', data);
+            return commonResponse(true, 'Get contest successfully', data);
         } catch (error) {
-            return commonResponse(false, 'Contest not found', error);
+            return commonResponse(false, 'Get contest failed', error);
         }
     }
 
     async getContests(@Query() getContestsDto: GetContestsDto) {
         try {
             const data = await this.contestsService.getContests(getContestsDto);
-            return commonResponse(true, 'Contests found successfully', data);
+            return commonResponse(true, 'Get contests successfully', data);
         } catch (error) {
-            return commonResponse(false, 'Contests found failed', error);
+            return commonResponse(false, 'Get contests failed', error);
         }
     }
 
@@ -46,9 +46,9 @@ export class ContestsController {
     async updateContest(@Param('id') contestId: string, @Body() updateContestDto: UpdateContestDto) {
         try {
             const data = await this.contestsService.updateContest(contestId, updateContestDto);
-            return commonResponse(true, 'Contest updated successfully', data);
+            return commonResponse(true, 'Update contest successfully', data);
         } catch (error) {
-            return commonResponse(false, 'Contest update failed', error);
+            return commonResponse(false, 'Update contest failed', error);
         }
     }
 
@@ -56,9 +56,9 @@ export class ContestsController {
     async deleteContest(@Param('id') contestId: string) {
         try {
             const data = await this.contestsService.deleteContest(contestId);
-            return commonResponse(true, 'Contest deleted successfully', data);
+            return commonResponse(true, 'Delete contest successfully', data);
         } catch (error) {
-            return commonResponse(false, 'Contest delete failed', error);
+            return commonResponse(false, 'Delete contest failed', error);
         }
     }
 }
