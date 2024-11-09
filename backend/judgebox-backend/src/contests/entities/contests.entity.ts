@@ -1,18 +1,15 @@
+import { UsersEntity } from "src/users/entities/users.entity";
 import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    Entity,
-    OneToMany,
+    Entity, ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import { UserRoles } from "../enums/user-role.enum";
-import { Exclude } from "class-transformer";
-import { ContestsEntity } from "src/contests/entities/contests.entity";
 
-@Entity('users')
-export class UsersEntity {
+@Entity('contests')
+export class ContestsEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -28,20 +25,15 @@ export class UsersEntity {
     @Column()
     name: string;
 
-    @Column()
-    email: string;
+    @Column('text')
+    description: string;
 
-    @Column()
-    @Exclude()
-    password: string;
+    @CreateDateColumn({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
+    startTime: Date;
 
-    @Column({
-        default: UserRoles.USER,
-        enum: UserRoles,
-        type: 'enum',
-    })
-    role: UserRoles;
+    @Column({ type: 'timestamp with time zone' })
+    endTime: Date;
 
-    @OneToMany(() => ContestsEntity, (contest) => contest.createdBy)
-    contestHost: ContestsEntity[];
+    @ManyToOne(() => UsersEntity, user => user.contestHost)
+    createdBy: UsersEntity;
 }
