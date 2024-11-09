@@ -1,3 +1,4 @@
+import { ContestProblemsEntity } from "src/contests/entities/contest-problems.entity";
 import { UsersEntity } from "src/users/entities/users.entity";
 import {
     Column,
@@ -54,4 +55,7 @@ export class ProblemsEntity {
 
     @ManyToOne(() => UsersEntity, (user) => user.createdProblems)
     createdBy: UsersEntity;
+
+    @OneToMany(() => ContestProblemsEntity, (contestProblem) => contestProblem.problem)
+    contests: ContestProblemsEntity[];
 }

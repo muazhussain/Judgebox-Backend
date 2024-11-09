@@ -9,6 +9,7 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import { ContestRegistrationsEntity } from "./contest-registrations.entity";
+import { ContestProblemsEntity } from "./contest-problems.entity";
 
 @Entity('contests')
 export class ContestsEntity {
@@ -41,4 +42,7 @@ export class ContestsEntity {
 
     @OneToMany(() => ContestRegistrationsEntity, registration => registration.contest)
     participants: ContestRegistrationsEntity[];
+
+    @OneToMany(() => ContestProblemsEntity, problem => problem.contest)
+    problems: ContestProblemsEntity[];
 }
