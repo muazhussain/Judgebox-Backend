@@ -4,6 +4,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
@@ -25,9 +26,11 @@ export class ContestProblemsEntity {
     deletedAt?: Date;
 
     @ManyToOne(() => ContestsEntity, contest => contest.problems)
+    @JoinColumn({ name: 'contest', referencedColumnName: 'id' })
     contest: ContestsEntity;
 
     @ManyToOne(() => ProblemsEntity, problem => problem.contests)
+    @JoinColumn({ name: 'problem', referencedColumnName: 'id' })
     problem: ProblemsEntity;
 
     @Column()

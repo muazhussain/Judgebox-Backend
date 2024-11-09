@@ -3,7 +3,7 @@ import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    Entity, ManyToOne,
+    Entity, JoinColumn, ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
@@ -38,6 +38,7 @@ export class ContestsEntity {
     endTime: Date;
 
     @ManyToOne(() => UsersEntity, user => user.hostedContests)
+    @JoinColumn({ name: 'createdBy', referencedColumnName: 'id' })
     createdBy: UsersEntity;
 
     @OneToMany(() => ContestRegistrationsEntity, registration => registration.contest)
