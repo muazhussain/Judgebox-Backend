@@ -41,11 +41,11 @@ export class ProblemsEntity {
     @Column('text')
     constraints: string;
 
-    @Column({ type: 'jsonb' })
-    testCases: {
+    @Column('jsonb')
+    sampleTestCases: {
         input: string;
         output: string;
-        isExample: boolean;
+        explanation?: string;
     }[];
 
     @Column({ type: 'int' })
