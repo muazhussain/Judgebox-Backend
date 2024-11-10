@@ -9,10 +9,10 @@ import { SubmissionsModule } from './submissions/submissions.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'dpg-csobl20gph6c73bp8plg-a',
       port: 5432,
-      username: 'postgres',
-      password: 'postgres',
+      username: 'judgebox_user',
+      password: 'aGcYY4OpQNZX58qAGFMJr7zPuxLuVUFt',
       database: 'judgebox',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
