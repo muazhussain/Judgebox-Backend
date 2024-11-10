@@ -3,6 +3,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProblemsModule } from './problems/problems.module';
 import { ContestsModule } from './contests/contests.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ContestsModule } from './contests/contests.module';
     }),
     UsersModule,
     ProblemsModule,
-    ContestsModule
+    ContestsModule,
+    SubmissionsModule
   ],
   controllers: [],
   providers: [],
