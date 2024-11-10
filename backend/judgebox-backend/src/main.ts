@@ -7,6 +7,8 @@ import {
   DocumentBuilder,
   SwaggerModule
 } from '@nestjs/swagger';
+import * as basicAuth from 'express-basic-auth';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -28,6 +30,19 @@ async function bootstrap() {
     transformOptions: { enableImplicitConversion: true },
     whitelist: true,
   }));
+
+  const basicAuthUser = 'judgebox-api';
+  const basicAuthPassword = '123666';
+
+  app.use(
+    ['/docs', '/docs-json'],
+    basicAuth({
+      challenge: true,
+      users: {
+        [basicAuthUser]: basicAuthPassword,
+      },
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('JudgeBox API')
