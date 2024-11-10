@@ -4,7 +4,9 @@ import { commonResponse } from "src/utils/common-response";
 import { CreateContestProblemDto } from "../dtos/create-contest-problem.dto";
 import { GetContestProblemsDto } from "../dtos/get-contest-problems.dto";
 import { UpdateContestProblemDto } from "../dtos/update-contest-problem.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Contest Problems')
 @Controller('contest-problems')
 export class ContestProblemsController {
     constructor(

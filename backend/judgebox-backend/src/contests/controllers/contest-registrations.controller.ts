@@ -3,7 +3,9 @@ import { ContestRegistrationsService } from "../services/contest-registrations.s
 import { CreateContestRegistrationDto } from "../dtos/create-contest-registration.dto";
 import { commonResponse } from "src/utils/common-response";
 import { GetContestRegistrationsDto } from "../dtos/get-contest-registrations.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Contest Registrations')
 @Controller('contest-registrations')
 export class ContestRegistrationsController {
     constructor(

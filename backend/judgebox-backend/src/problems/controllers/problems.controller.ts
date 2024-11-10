@@ -13,7 +13,9 @@ import { commonResponse } from 'src/utils/common-response';
 import { CreateProblemDto } from '../dtos/create-problem.dto';
 import { GetProblemsDto } from '../dtos/get-problems.dto';
 import { UpdateProblemDto } from '../dtos/update-problem.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Problems')
 @Controller('problems')
 export class ProblemsController {
     constructor(
