@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProblemsModule } from './problems/problems.module';
 import { ContestsModule } from './contests/contests.module';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { TestCasesModule } from './test-cases/test-cases.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { SubmissionsModule } from './submissions/submissions.module';
     UsersModule,
     ProblemsModule,
     ContestsModule,
-    SubmissionsModule
+    SubmissionsModule,
+    TestCasesModule
   ],
   controllers: [],
   providers: [],
