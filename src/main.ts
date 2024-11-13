@@ -8,13 +8,16 @@ import {
   SwaggerModule
 } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
+import { ENV } from './env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet.default());
 
-  app.enableCors();
+  app.setGlobalPrefix(ENV.app.api.prefix);
+
+  app.enableCors({ exposedHeaders: ['Content-Disposition'] });
 
   app.use(
     rateLimit.default({
@@ -31,8 +34,8 @@ async function bootstrap() {
     whitelist: true,
   }));
 
-  const basicAuthUser = 'judgebox-api';
-  const basicAuthPassword = '123666';
+  const basicAuthUser = ENV.swagger.user;
+  const basicAuthPassword = ENV.swagger.password;
 
   app.use(
     ['/docs', '/docs-json'],
@@ -45,9 +48,9 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('JudgeBox API')
-    .setDescription('The JudgeBox API description')
-    .setVersion('1.0')
+    .setTitle(ENV.app.api.title)
+    .setDescription(ENV.app.api.description)
+    .setVersion(ENV.app.api.version)
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
@@ -60,6 +63,6 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(3000);
+  await app.listen(ENV.port || 3000);
 }
 bootstrap();
