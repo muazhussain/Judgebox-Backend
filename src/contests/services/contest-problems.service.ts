@@ -26,10 +26,12 @@ export class ContestProblemsService {
         try {
             const contestProblem = await queryRunner.manager.save(this.contestProblemsRepository.metadata.target, createContestProblemDto);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return contestProblem;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -85,10 +87,12 @@ export class ContestProblemsService {
             Object.assign(findContestProblem, updateContestProblemDto);
             const contestProblem = await queryRunner.manager.update(this.contestProblemsRepository.metadata.target, { id: contestProblemId }, findContestProblem);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return contestProblem;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -107,10 +111,12 @@ export class ContestProblemsService {
             }
             const contestProblem = await queryRunner.manager.softDelete(this.contestProblemsRepository.metadata.target, { id: contestProblemId });
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return contestProblem;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }

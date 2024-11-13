@@ -25,10 +25,12 @@ export class ContestRegistrationsService {
         try {
             const contestRegistration = await queryRunner.manager.save(this.contestsRegistrationsRepository.metadata.target, createContestRegistrationDto);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return contestRegistration;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -87,9 +89,11 @@ export class ContestRegistrationsService {
             }
             await queryRunner.manager.softDelete(this.contestsRegistrationsRepository.metadata.target, findContestRegistration);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }

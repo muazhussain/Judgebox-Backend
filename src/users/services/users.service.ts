@@ -46,9 +46,11 @@ export class UsersService {
                 role: UserRoles.USER,
             });
             await queryRunner.commitTransaction();
-            await queryRunner.release();
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -118,9 +120,11 @@ export class UsersService {
             Object.assign(findUser, updateUserDto);
             await queryRunner.manager.save(this.usersRepository.metadata.target, findUser);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -139,9 +143,11 @@ export class UsersService {
             }
             await queryRunner.manager.softDelete(this.usersRepository.metadata.target, findUser);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }

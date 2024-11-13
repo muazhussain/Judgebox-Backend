@@ -20,10 +20,12 @@ export class ProblemsService {
         try {
             const problem = await queryRunner.manager.save(this.problemsRepository.metadata.target, createProblemDto);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return problem;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -80,10 +82,12 @@ export class ProblemsService {
             Object.assign(findProblem, updateProblemDto);
             await queryRunner.manager.update(this.problemsRepository.metadata.target, { id: problemId }, findProblem);
             await queryRunner.commitTransaction();
-            await queryRunner.release();
             return findProblem;
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 
@@ -102,9 +106,11 @@ export class ProblemsService {
             }
             await queryRunner.manager.softDelete(this.problemsRepository.metadata.target, { id: problemId });
             await queryRunner.commitTransaction();
-            await queryRunner.release();
         } catch (error) {
+            await queryRunner.rollbackTransaction();
             throw error;
+        } finally {
+            await queryRunner.release();
         }
     }
 }
