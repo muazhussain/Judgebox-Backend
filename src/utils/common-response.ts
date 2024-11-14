@@ -8,10 +8,16 @@ export interface SuccessResponse<T> {
     statusCode: number;
 }
 
+export interface ErrorDetail {
+    message: string;
+    error: string;
+    statusCode: number;
+}
+
 export interface ErrorResponse {
     success: false;
     message: string;
-    error: any;
+    error: ErrorDetail;
     timestamp: string;
     statusCode: number;
 }
@@ -57,12 +63,18 @@ export function commonResponse<T>(
         };
     }
 
+    const errorDetail: ErrorDetail = {
+        message: (payload as any)?.response?.message || (payload as any)?.message || message,
+        error: (payload as any)?.response?.error || (payload as any)?.name || 'Error',
+        statusCode: (payload as any)?.status || statusCode,
+    };
+
     return {
         success: false,
         message,
-        error: payload,
+        error: errorDetail,
         timestamp,
-        statusCode,
+        statusCode: errorDetail.statusCode,
     };
 }
 
