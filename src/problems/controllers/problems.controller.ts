@@ -6,23 +6,41 @@ import {
     Param,
     Patch,
     Post,
-    Query
+    Query,
+    UseGuards
 } from '@nestjs/common';
 import { ProblemsService } from '../services/problems.service';
 import { commonResponse } from 'src/utils/common-response';
 import { CreateProblemDto } from '../dtos/create-problem.dto';
 import { GetProblemsDto } from '../dtos/get-problems.dto';
 import { UpdateProblemDto } from '../dtos/update-problem.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/users/guards/roles.guard';
+import { JwtGuard } from 'src/users/guards/jwt.guard';
+import { Roles } from 'src/users/decorators/roles.decorator';
+import { UserRoles } from 'src/users/enums/user-role.enum';
 
 @ApiTags('Problems')
 @Controller('problems')
+@ApiBearerAuth()
 export class ProblemsController {
     constructor(
         private readonly problemsService: ProblemsService,
     ) { }
 
-    @Post('create')
+    @Get()
+    async getProblems(@Query() getProblemsDto: GetProblemsDto) {
+        try {
+            const data = await this.problemsService.getProblems(getProblemsDto);
+            return commonResponse(true, 'Get problems successfully', data);
+        } catch (error) {
+            return commonResponse(false, 'Get problems failed', error);
+        }
+    }
+
+    @Post()
+    @UseGuards(RolesGuard, JwtGuard)
+    @Roles(UserRoles.ADMIN)
     async createProblem(@Body() createProblemDto: CreateProblemDto) {
         try {
             const data = await this.problemsService.createProblem(createProblemDto);
@@ -42,17 +60,9 @@ export class ProblemsController {
         }
     }
 
-    @Get('all')
-    async getProblems(@Query() getProblemsDto: GetProblemsDto) {
-        try {
-            const data = await this.problemsService.getProblems(getProblemsDto);
-            return commonResponse(true, 'Get problems successfully', data);
-        } catch (error) {
-            return commonResponse(false, 'Get problems failed', error);
-        }
-    }
-
     @Patch(':id')
+    @UseGuards(RolesGuard, JwtGuard)
+    @Roles(UserRoles.ADMIN)
     async updateProblem(@Param('id') problemId: string, @Body() updateProblemDto: UpdateProblemDto) {
         try {
             const data = await this.problemsService.updateProblem(problemId, updateProblemDto);
@@ -63,6 +73,8 @@ export class ProblemsController {
     }
 
     @Delete(':id')
+    @UseGuards(RolesGuard, JwtGuard)
+    @Roles(UserRoles.ADMIN)
     async deleteProblem(@Param('id') problemId: string) {
         try {
             const data = await this.problemsService.deleteProblem(problemId);

@@ -1,19 +1,32 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { ContestProblemsService } from "../services/contest-problems.service";
 import { commonResponse } from "src/utils/common-response";
 import { CreateContestProblemDto } from "../dtos/create-contest-problem.dto";
 import { GetContestProblemsDto } from "../dtos/get-contest-problems.dto";
 import { UpdateContestProblemDto } from "../dtos/update-contest-problem.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtGuard } from "src/users/guards/jwt.guard";
 
 @ApiTags('Contest Problems')
 @Controller('contest-problems')
+@ApiBearerAuth()
 export class ContestProblemsController {
     constructor(
         private readonly contestProblemsService: ContestProblemsService,
     ) { }
 
-    @Post('create')
+    @Get()
+    async getAllContestProblems(@Query() getContestProblemsDto: GetContestProblemsDto) {
+        try {
+            const data = await this.contestProblemsService.getContestProblems(getContestProblemsDto);
+            return commonResponse(true, 'Get all contest problems successfully', data);
+        } catch (error) {
+            return commonResponse(false, 'Get all contest problems failed', error);
+        }
+    }
+
+    @Post()
+    @UseGuards(JwtGuard)
     async createContestProblem(@Body() createContestProblemDto: CreateContestProblemDto) {
         try {
             const data = await this.contestProblemsService.createContestProblem(createContestProblemDto);
@@ -33,17 +46,8 @@ export class ContestProblemsController {
         }
     }
 
-    @Get('all')
-    async getAllContestProblems(@Query() getContestProblemsDto: GetContestProblemsDto) {
-        try {
-            const data = await this.contestProblemsService.getContestProblems(getContestProblemsDto);
-            return commonResponse(true, 'Get all contest problems successfully', data);
-        } catch (error) {
-            return commonResponse(false, 'Get all contest problems failed', error);
-        }
-    }
-
     @Patch(':id')
+    @UseGuards(JwtGuard)
     async updateContestProblem(@Param('id') contestProblemId: string, @Body() updateContestProblemDto: UpdateContestProblemDto) {
         try {
             const data = await this.contestProblemsService.updateContestProblem(contestProblemId, updateContestProblemDto);
@@ -54,6 +58,7 @@ export class ContestProblemsController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtGuard)
     async deleteContestProblem(@Param('id') contestProblemId: string) {
         try {
             const data = await this.contestProblemsService.deleteContestProblem(contestProblemId);
