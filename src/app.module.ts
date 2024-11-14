@@ -7,6 +7,7 @@ import { SubmissionsModule } from './submissions/submissions.module';
 import { TestCasesModule } from './test-cases/test-cases.module';
 import { ENV } from './env';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -23,6 +24,12 @@ import { MongooseModule } from '@nestjs/mongoose';
       autoLoadEntities: ENV.database.autoLoadEntities,
     }),
     MongooseModule.forRoot(ENV.mongodb.uri),
+    BullModule.forRoot({
+      redis: {
+        host: ENV.redis.host,
+        port: ENV.redis.port,
+      },
+    }),
     UsersModule,
     ProblemsModule,
     ContestsModule,
