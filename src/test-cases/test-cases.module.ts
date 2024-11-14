@@ -7,10 +7,10 @@ import { TestCase, TestCasesSchema } from './schemas/test-cases.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-        { name: TestCase.name, schema: TestCasesSchema }
+      { name: TestCase.name, schema: TestCasesSchema }
     ])
   ],
   controllers: [TestCasesController],
   providers: [TestCasesService]
 })
-export class TestCasesModule {}
+export class TestCasesModule { }
