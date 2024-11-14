@@ -21,6 +21,11 @@ interface MongoConfig {
     uri: string;
 }
 
+interface RedisConfig {
+    host: string;
+    port: number;
+}
+
 interface EnvironmentConfig {
     port: number;
     env: string;
@@ -44,6 +49,7 @@ interface EnvironmentConfig {
     };
     database: DatabaseConfig;
     mongodb: MongoConfig;
+    redis: RedisConfig;
 }
 
 // Environment variable validation schema
@@ -80,6 +86,10 @@ const envSchema = z.object({
 
     // MongoDB configuration
     MONGODB_URI: z.string(),
+
+    // Redis configuration
+    REDIS_HOST: z.string(),
+    REDIS_PORT: z.string().transform(Number),
 });
 
 // Load environment variables
@@ -128,7 +138,11 @@ export const ENV: EnvironmentConfig = {
     },
     mongodb: {
         uri: validatedEnv.MONGODB_URI,
-    }
+    },
+    redis: {
+        host: validatedEnv.REDIS_HOST,
+        port: validatedEnv.REDIS_PORT,
+    },
 };
 
 // Export the validated environment type
