@@ -1,4 +1,4 @@
-name: NestJS Backend Service CI/CD
+name: NestJS CI/CD Pipeline
 
 on:
   push:
@@ -7,22 +7,23 @@ on:
     branches: [ "main" ]
 
 env:
-  APP_NAME: online-judge-backend
-  DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  APP_NAME: judgebox-backend
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
+    - uses: actions/checkout@v4
+    
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'npm'
+
+    - name: Create env file
+      run: |
+        echo "${{ secrets.ENV }}" > .env
 
     - name: Install dependencies
       run: npm ci
@@ -39,23 +40,11 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Extract metadata for Docker
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}
-        tags: |
-          type=sha,format=long
-          type=ref,event=branch
-          type=ref,event=tag
-          type=raw,value=latest,enable={{is_default_branch}}
-
-    - name: Build and push Docker image
+    - name: Build and push
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}:latest
+        build-args: |
+          ENV_FILE=${{ secrets.ENV }}
