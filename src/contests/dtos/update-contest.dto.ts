@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { 
-    IsString, 
-    MinLength, 
-    MaxLength, 
-    IsOptional 
+import {
+    IsString,
+    MinLength,
+    MaxLength,
+    IsOptional
 } from "class-validator";
 
 export class UpdateContestDto {
@@ -38,7 +38,7 @@ export class UpdateContestDto {
     @ApiProperty({
         required: false,
         type: 'string',
-        example: 'Contest start time',
+        example: 'YYYY-MM-DD HH:mm:ss',
         description: 'The start time of the contest',
     })
     @IsOptional()
@@ -48,7 +48,7 @@ export class UpdateContestDto {
     @ApiProperty({
         required: false,
         type: 'string',
-        example: 'Contest end time',
+        example: 'YYYY-MM-DD HH:mm:ss',
         description: 'The end time of the contest',
     })
     @IsOptional()

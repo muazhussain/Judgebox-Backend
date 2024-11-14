@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { ContestRegistrationsEntity } from "./contest-registrations.entity";
 import { ContestProblemsEntity } from "./contest-problems.entity";
+import { SubmissionsEntity } from "src/submissions/entities/submissions.entity";
 
 @Entity('contests')
 export class ContestsEntity {
@@ -31,11 +32,11 @@ export class ContestsEntity {
     @Column('text')
     description: string;
 
-    @CreateDateColumn({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-    startTime: Date;
+    @Column()
+    startTime: string;
 
-    @Column({ type: 'timestamp with time zone' })
-    endTime: Date;
+    @Column()
+    endTime: string;
 
     @ManyToOne(() => UsersEntity, user => user.hostedContests)
     @JoinColumn({ name: 'createdBy', referencedColumnName: 'id' })
@@ -46,4 +47,7 @@ export class ContestsEntity {
 
     @OneToMany(() => ContestProblemsEntity, problem => problem.contest)
     problems: ContestProblemsEntity[];
+
+    @OneToMany(() => SubmissionsEntity, submission => submission.contest)
+    submissions: SubmissionsEntity[];
 }

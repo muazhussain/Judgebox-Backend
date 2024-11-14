@@ -36,7 +36,7 @@ export class CreateContestDto {
     @ApiProperty({
         required: true,
         type: 'string',
-        example: 'Contest start time',
+        example: 'YYYY-MM-DD HH:mm:ss',
         description: 'The start time of the contest',
     })
     @IsString()
@@ -45,7 +45,7 @@ export class CreateContestDto {
     @ApiProperty({
         required: true,
         type: 'string',
-        example: 'Contest end time',
+        example: 'YYYY-MM-DD HH:mm:ss',
         description: 'The end time of the contest',
     })
     @IsString()
