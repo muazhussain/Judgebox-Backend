@@ -37,9 +37,12 @@ export class ContestRegistrationsService {
     async getContestRegistration(contestRegistrationId: string): Promise<ContestRegistrationsEntity> {
         try {
             const findContestRegistration = await this.contestsRegistrationsRepository.findOne({
-                select: ['id', 'participant', 'contest'],
                 where: {
                     id: contestRegistrationId,
+                },
+                relations: {
+                    participant: true,
+                    contest: true,
                 },
             });
             if (!findContestRegistration) {
@@ -53,13 +56,14 @@ export class ContestRegistrationsService {
 
     async getContestRegistrations(getContestRegistrationsDto: GetContestRegistrationsDto): Promise<ContestRegistrationsEntity[]> {
         try {
+            const limit = getContestRegistrationsDto?.limit || 10;
+            const page = getContestRegistrationsDto?.page || 1;
             return await this.contestsRegistrationsRepository.find({
-                select: ['id', 'participant', 'contest'],
-                take: getContestRegistrationsDto?.limit || 10,
-                skip: (getContestRegistrationsDto?.page || 1 - 1) * getContestRegistrationsDto?.limit || 10,
                 order: {
                     createdAt: 'DESC',
                 },
+                take: limit,
+                skip: (page - 1) * limit,
                 where: {
                     contest: {
                         id: getContestRegistrationsDto?.contest,
@@ -67,6 +71,10 @@ export class ContestRegistrationsService {
                     participant: {
                         id: getContestRegistrationsDto?.participant,
                     },
+                },
+                relations: {
+                    participant: true,
+                    contest: true,
                 },
             });
         } catch (error) {

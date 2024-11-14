@@ -35,6 +35,9 @@ export class ProblemsService {
                 where: {
                     id: problemId,
                 },
+                relations: {
+                    createdBy: true,
+                },
             });
             if (!findProblem) {
                 throw new NotFoundException('Problem not found');
@@ -47,6 +50,8 @@ export class ProblemsService {
 
     async getProblems(getProblemsDto: GetProblemsDto) {
         try {
+            const limit = getProblemsDto?.limit || 10;
+            const page = getProblemsDto?.page || 1;
             const problems = await this.problemsRepository.find({
                 order: {
                     createdAt: 'DESC',
@@ -56,9 +61,11 @@ export class ProblemsService {
                         id: getProblemsDto.createdBy,
                     },
                 },
-                take: getProblemsDto.limit,
-                skip: (getProblemsDto.page - 1) * getProblemsDto.limit,
-                relations: ['createdBy'],
+                take: limit,
+                skip: (page - 1) * limit,
+                relations: {
+                    createdBy: true,
+                }
             });
             return problems;
         } catch (error) {

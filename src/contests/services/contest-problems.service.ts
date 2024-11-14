@@ -41,6 +41,9 @@ export class ContestProblemsService {
                 where: {
                     id: contestProblemId,
                 },
+                relations: {
+                    problem: true,
+                },
             });
             if (!findContestProblem) {
                 throw new NotFoundException('Contest problem not found');
@@ -53,9 +56,11 @@ export class ContestProblemsService {
 
     async getContestProblems(getContestProblemsDto: GetContestProblemsDto): Promise<ContestProblemsEntity[]> {
         try {
+            const take = getContestProblemsDto?.limit || 10;
+            const page = getContestProblemsDto?.page || 1;
             return await this.contestProblemsRepository.find({
-                take: getContestProblemsDto?.limit || 10,
-                skip: (getContestProblemsDto?.page || 1 - 1) * getContestProblemsDto?.limit || 10,
+                take: take,
+                skip: (page - 1) * take,
                 order: {
                     problemOrder: 'ASC',
                     createdAt: 'DESC',
@@ -65,7 +70,11 @@ export class ContestProblemsService {
                         id: getContestProblemsDto?.contest,
                     },
                 },
-            })
+                relations: {
+                    problem: true,
+                    contest: true,
+                },
+            });
         } catch (error) {
             throw error;
         }

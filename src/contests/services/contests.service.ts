@@ -56,6 +56,8 @@ export class ContestsService {
 
     async getContests(getContestsDto: GetContestsDto): Promise<ContestsEntity[]> {
         try {
+            const limit = getContestsDto?.limit || 10;
+            const page = getContestsDto?.page || 1;
             return await this.contestsRepository.find({
                 where: {
                     createdBy: {
@@ -63,8 +65,8 @@ export class ContestsService {
                     },
                 },
                 select: ['id', 'name', 'description', 'startTime', 'endTime', 'createdAt', 'createdBy'],
-                take: getContestsDto?.limit || 10,
-                skip: (getContestsDto?.page || 1 - 1) * getContestsDto?.limit || 10,
+                take: limit,
+                skip: (page - 1) * limit,
                 order: {
                     createdAt: 'DESC',
                 },

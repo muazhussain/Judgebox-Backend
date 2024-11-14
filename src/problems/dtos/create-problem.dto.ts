@@ -85,7 +85,7 @@ export class CreateProblemDto {
     })
     @IsString()
     @MaxLength(5000)
-    testCases: string;
+    sampleTestCases: string;
 
     @ApiProperty({
         required: true,
