@@ -8,6 +8,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersController } from './controllers/users.controller';
 import { ENV } from 'src/env';
+import { JwtGuard } from './guards/jwt.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -23,10 +25,15 @@ import { ENV } from 'src/env';
   providers: [
     UsersService,
     JwtStrategy,
+    JwtGuard,
+    RolesGuard,
   ],
   controllers: [
     AuthController,
     UsersController
+  ],
+  exports: [
+    PassportModule,
   ]
 })
 export class UsersModule { }
