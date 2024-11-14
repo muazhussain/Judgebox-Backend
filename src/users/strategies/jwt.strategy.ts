@@ -25,12 +25,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(request: Request, payload: any): Promise<string> {
+    async validate(request: Request, payload: any) {
         const { email, tokenType } = payload;
         const user = await this.userRepository.findOne({ where: { email } });
         if (!user || tokenType !== 'access') {
             throw new UnauthorizedException();
         }
-        return user.id;
+        return { id: user.id, role: user.role, email: user.email };
     }
 }
