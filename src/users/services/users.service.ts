@@ -16,6 +16,8 @@ import { UserRoles } from '../enums/user-role.enum';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from '../dtos/login.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { ENV } from 'src/env';
+import { GetUsersDto } from '../dtos/get-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -38,7 +40,7 @@ export class UsersService {
             if (existingUser) {
                 throw new ConflictException('Email already exists');
             }
-            const salt = await bcrypt.genSalt();
+            const salt = await bcrypt.genSalt(ENV.security.bcryptSaltRounds);
             const hashedPassword = await bcrypt.hash(registerDto.password, salt);
             const user = await queryRunner.manager.save(this.usersRepository.metadata.target, {
                 ...registerDto,
@@ -78,9 +80,9 @@ export class UsersService {
         try {
             const findUser = await this.usersRepository.findOne({
                 where: {
-                    id: request.user,
+                    id: request.user.id,
                 },
-                select: ['id', 'name', 'email'],
+                select: ['id', 'name', 'email', 'role', 'createdAt'],
             });
             if (!findUser) {
                 throw new NotFoundException('User not found');
@@ -91,13 +93,17 @@ export class UsersService {
         }
     }
 
-    async getAllUsers(): Promise<UsersEntity[]> {
+    async getUsers(getUsersDto: GetUsersDto): Promise<UsersEntity[]> {
         try {
+            const limit = getUsersDto?.limit || 10;
+            const page = getUsersDto?.page || 1;
             return await this.usersRepository.find({
                 where: {
                     role: UserRoles.USER,
                 },
-                select: ['id', 'name', 'email'],
+                take: limit,
+                skip: (page - 1) * limit,
+                select: ['id', 'name', 'email', 'createdAt'],
             });
         } catch (error) {
             throw error;
