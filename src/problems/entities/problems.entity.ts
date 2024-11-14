@@ -1,4 +1,5 @@
 import { ContestProblemsEntity } from "src/contests/entities/contest-problems.entity";
+import { SubmissionsEntity } from "src/submissions/entities/submissions.entity";
 import { UsersEntity } from "src/users/entities/users.entity";
 import {
     Column,
@@ -60,4 +61,7 @@ export class ProblemsEntity {
 
     @OneToMany(() => ContestProblemsEntity, (contestProblem) => contestProblem.problem)
     contests: ContestProblemsEntity[];
+
+    @OneToMany(() => SubmissionsEntity, (submission) => submission.problem)
+    submissions: SubmissionsEntity[];
 }
