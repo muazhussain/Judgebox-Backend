@@ -44,7 +44,7 @@ export class AuthController {
             //     secure: true,
             //     sameSite: 'strict',
             // });
-            return commonResponse(true, 'User logged in successfully', accessToken);
+            return commonResponse(true, 'User logged in successfully', { accessToken, refreshToken });
         } catch (error) {
             return commonResponse(false, 'User login failed', error);
         }
