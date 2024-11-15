@@ -2,30 +2,6 @@ import { config } from 'dotenv';
 import { z } from 'zod';
 import * as path from 'path';
 
-interface DatabaseConfig {
-    type: string;
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
-    synchronize: boolean;
-    logging: boolean;
-    autoLoadEntities: boolean;
-    entities: string;
-    migrations: string;
-    migrationsDir: string;
-}
-
-interface MongoConfig {
-    uri: string;
-}
-
-interface RedisConfig {
-    host: string;
-    port: number;
-}
-
 interface EnvironmentConfig {
     port: number;
     env: string;
@@ -47,12 +23,23 @@ interface EnvironmentConfig {
         user: string;
         password: string;
     };
-    database: DatabaseConfig;
-    mongodb: MongoConfig;
-    redis: RedisConfig;
+    database: {
+        url: string;
+        synchronize: boolean;
+        logging: boolean;
+        autoLoadEntities: boolean;
+        entities: string;
+        migrations: string;
+        migrationsDir: string;
+    };
+    mongodb: {
+        uri: string;
+    };
+    redis: {
+        url: string;
+    };
 }
 
-// Environment variable validation schema
 const envSchema = z.object({
     PORT: z.string().transform(Number),
     NODE_ENV: z.string().default('dev'),
@@ -70,37 +57,26 @@ const envSchema = z.object({
     SWAGGER_USER: z.string(),
     SWAGGER_PASSWORD: z.string(),
 
-    // PostgreSQL Database configuration
-    TYPEORM_CONNECTION: z.string(),
-    TYPEORM_HOST: z.string(),
-    TYPEORM_PORT: z.string().transform(Number),
-    TYPEORM_USERNAME: z.string(),
-    TYPEORM_PASSWORD: z.string(),
-    TYPEORM_DATABASE: z.string(),
+    // Database URLs
+    DATABASE_URL: z.string(),
+    MONGODB_URL: z.string(),
+    REDIS_URL: z.string(),
+
+    // Additional PostgreSQL settings
     TYPEORM_SYNCHRONIZE: z.string().transform((val) => val === 'true'),
     TYPEORM_LOGGING: z.string().transform((val) => val === 'true'),
     TYPEORM_AUTOLOAD_ENTITIES: z.string().transform((val) => val === 'true'),
     TYPEORM_ENTITIES: z.string(),
     TYPEORM_MIGRATIONS: z.string(),
     TYPEORM_MIGRATIONS_DIR: z.string(),
-
-    // MongoDB configuration
-    MONGODB_URI: z.string(),
-
-    // Redis configuration
-    REDIS_HOST: z.string(),
-    REDIS_PORT: z.string().transform(Number),
 });
 
-// Load environment variables
 config({
     path: path.join(process.cwd(), `.env.${process.env.NODE_ENV || 'dev'}`),
 });
 
-// Validate and transform environment variables
 const validatedEnv = envSchema.parse(process.env);
 
-// Create and export the typed environment configuration
 export const ENV: EnvironmentConfig = {
     port: validatedEnv.PORT,
     env: validatedEnv.NODE_ENV,
@@ -123,12 +99,7 @@ export const ENV: EnvironmentConfig = {
         password: validatedEnv.SWAGGER_PASSWORD,
     },
     database: {
-        type: validatedEnv.TYPEORM_CONNECTION,
-        host: validatedEnv.TYPEORM_HOST,
-        port: validatedEnv.TYPEORM_PORT,
-        username: validatedEnv.TYPEORM_USERNAME,
-        password: validatedEnv.TYPEORM_PASSWORD,
-        database: validatedEnv.TYPEORM_DATABASE,
+        url: validatedEnv.DATABASE_URL,
         synchronize: validatedEnv.TYPEORM_SYNCHRONIZE,
         logging: validatedEnv.TYPEORM_LOGGING,
         autoLoadEntities: validatedEnv.TYPEORM_AUTOLOAD_ENTITIES,
@@ -137,13 +108,11 @@ export const ENV: EnvironmentConfig = {
         migrationsDir: validatedEnv.TYPEORM_MIGRATIONS_DIR,
     },
     mongodb: {
-        uri: validatedEnv.MONGODB_URI,
+        uri: validatedEnv.MONGODB_URL,
     },
     redis: {
-        host: validatedEnv.REDIS_HOST,
-        port: validatedEnv.REDIS_PORT,
+        url: validatedEnv.REDIS_URL,
     },
 };
 
-// Export the validated environment type
 export type Env = typeof ENV;

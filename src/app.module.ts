@@ -12,12 +12,8 @@ import { BullModule } from '@nestjs/bull';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: ENV.database.type as any,
-      host: ENV.database.host,
-      port: ENV.database.port,
-      username: ENV.database.username,
-      password: ENV.database.password,
-      database: ENV.database.database,
+      type: 'postgres',
+      url: ENV.database.url,
       logging: ENV.database.logging,
       entities: [ENV.database.entities],
       synchronize: ENV.database.synchronize,
@@ -25,10 +21,7 @@ import { BullModule } from '@nestjs/bull';
     }),
     MongooseModule.forRoot(ENV.mongodb.uri),
     BullModule.forRoot({
-      redis: {
-        host: ENV.redis.host,
-        port: ENV.redis.port,
-      },
+      redis: ENV.redis.url,
     }),
     UsersModule,
     ProblemsModule,
